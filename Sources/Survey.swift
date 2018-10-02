@@ -40,7 +40,6 @@ public enum Survey: PathMakeable {
 		// MARK: POST /survey/:id/answer
 		
 		public enum Create {
-			
 			/// Expected request model for `POST /survey/:id/answer`
 			public struct Request: Codable {
 				public let businessID: String
@@ -68,10 +67,40 @@ public enum Survey: PathMakeable {
 			/// Server's response model for `POST /survey/:id/answer`
 			public struct Response: Codable {
 				public let surveyResponseID: UUID
+				public let thankYouText: String
+				public let reviewSites: [ReviewSiteWithURL]
 				
-				public init(responseID: UUID) {
+				public init(responseID: UUID, thankYouText: String, reviewSites: [ReviewSiteWithURL]) {
 					self.surveyResponseID = responseID
+					self.thankYouText = thankYouText
+					self.reviewSites = reviewSites
 				}
+				
+				public struct ReviewSiteWithURL: Codable {
+					public let siteName: ReviewSiteName
+					public let reviewURL: URL
+					
+					public init(siteName: ReviewSiteName, url: URL) {
+						self.siteName = siteName
+						self.reviewURL = url
+					}
+				}
+			}
+		}
+	}
+	
+	// MARK: - Check additional information
+	public enum CheckAdditionalInformation {
+		public static var pathComponent: String { return "check-additional-information" }
+		public struct Response: Codable {
+			public let status: Status
+			
+			public init(status: Status) {
+				self.status = status
+			}
+			
+			public enum Status: String, Codable {
+				case valid, invalid
 			}
 		}
 	}
