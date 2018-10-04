@@ -37,13 +37,6 @@ public enum Search: PathMakeable {
 		public typealias Response = BusinessModel
 	}
 	
-	public enum BusinessID: PathMakeable {
-		public static var pathComponent: String { return "business-id" }
-		public static var parentPath: PathMakeable.Type? { return Search.self }
-		
-		public typealias Response = BusinessModel
-	}
-	
 	public struct BusinessModel: Codable {
 		public let businessID: String
 		public let title: String

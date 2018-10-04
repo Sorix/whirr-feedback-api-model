@@ -8,4 +8,8 @@ public enum Business {
 	public enum Logo {
 		public typealias Response = Data
 	}
+	
+	public enum GetShortInfo {
+		public typealias Response = Search.BusinessModel
+	}
 }
