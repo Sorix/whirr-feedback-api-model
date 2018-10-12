@@ -37,6 +37,47 @@ public enum Search: PathMakeable {
 		public typealias Response = BusinessModel
 	}
 	
+	public enum Beacon {
+		public static var pathComponent: String { return "beacon" }
+		public static var parentPath: PathMakeable.Type? { return Search.self }
+		
+		public struct Request: Codable {
+			public var major: Int
+			public var minor: Int
+			
+			public init(major: Int, minor: Int) {
+				self.major = major
+				self.minor = minor
+			}
+		}
+		
+		public struct Response: Codable {
+			public struct NotificationOptions: Codable {
+				public let businessId: String
+				public var placeLogo: URL?
+				public let notifyIn: TimeInterval
+				public let notificationText: String
+				
+				public init(businessID: String, notifyIn: TimeInterval, notificationText: String) {
+					self.businessId = businessID
+					self.notifyIn = notifyIn
+					self.notificationText = notificationText
+				}
+			}
+			
+			public enum Action {
+				case doNothing
+				case showReviewPage(notificationOptions: NotificationOptions)
+			}
+			
+			public let action: Action
+			
+			public init(action: Action) {
+				self.action = action
+			}
+		}
+	}
+	
 	public struct BusinessModel: Codable {
 		public let businessID: String
 		public let title: String
@@ -49,3 +90,39 @@ public enum Search: PathMakeable {
 		}
 	}
 }
+
+extension Search.Beacon.Response.Action: Codable {
+	private enum CodingKeys: String, CodingKey {
+		case value, notificationOptions
+	}
+	
+	private enum CodableAction: String, Decodable {
+		case doNothing, showReviewPage
+	}
+	
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		
+		switch self {
+		case .doNothing:
+			try container.encode(CodableAction.doNothing.rawValue, forKey: .value)
+		case .showReviewPage(let notificationOptions):
+			try container.encode(CodableAction.showReviewPage.rawValue, forKey: .value)
+			try container.encode(notificationOptions, forKey: .notificationOptions)
+		}
+	}
+	
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let action = try container.decode(CodableAction.self, forKey: .value)
+		
+		switch action {
+		case .doNothing: self = .doNothing
+		case .showReviewPage:
+			let options = try container.decode(Search.Beacon.Response.NotificationOptions.self, forKey: .notificationOptions)
+			self = .showReviewPage(notificationOptions: options)
+		}
+	}
+	
+}
+
