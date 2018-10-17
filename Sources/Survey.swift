@@ -89,6 +89,37 @@ public enum Survey: PathMakeable {
 		}
 	}
 	
+	// MARK: - GET /survey/:survey-id/response/:response-id
+	public struct GetSurveyResponse {
+		public struct ServerResponse {
+			public enum ReplyStatus {
+				case replied(text: String, coupon: Coupon?)
+				case notReplied
+			}
+			
+			public struct Coordinate: Codable {
+				public var latitude, longitude: Double
+				
+				public init(latitude: Double, longitude: Double) {
+					self.latitude = latitude
+					self.longitude = longitude
+				}
+			}
+			
+			public struct Coupon: Codable {
+				public let title: String
+				public let detailInfo: String
+				public let validTo: Date?
+				public let imageUrl: URL?
+				public let location: Coordinate?
+				public let termsUrl: URL?
+				public let passUrl: URL
+			}
+			
+			public let status: ReplyStatus
+		}
+	}
+	
 	// MARK: - Check additional information
 	public enum CheckAdditionalInformation {
 		public static var pathComponent: String { return "check-additional-information" }
@@ -103,5 +134,43 @@ public enum Survey: PathMakeable {
 				case valid, invalid
 			}
 		}
+	}
+}
+
+// MARK:
+extension Survey.GetSurveyResponse.ServerResponse.ReplyStatus: Codable {
+	private enum CodableAction: String, Codable {
+		case replied, notReplied
+	}
+	
+	private enum CodingKeys: String, CodingKey {
+		case value, text, coupon
+	}
+	
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+
+		switch self {
+		case .notReplied: try container.encode(CodableAction.notReplied, forKey: .value)
+		case .replied(let text, let coupon):
+			try container.encode(CodableAction.replied, forKey: .value)
+			try container.encode(text, forKey: .text)
+			try container.encode(coupon, forKey: .coupon)
+		}
+	}
+	
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let action = try container.decode(CodableAction.self, forKey: .value)
+		
+		switch action {
+		case .notReplied: self = .notReplied
+		case .replied:
+			let text = try container.decode(String.self, forKey: .text)
+			let coupon = try container.decodeIfPresent(Survey.GetSurveyResponse.ServerResponse.Coupon.self, forKey: .coupon)
+			
+			self = .replied(text: text, coupon: coupon)
+		}
+		
 	}
 }
