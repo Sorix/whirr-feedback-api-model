@@ -89,9 +89,11 @@ public enum Survey: PathMakeable {
 		}
 	}
 	
-	// MARK: - GET /survey/:survey-id/response/:response-id
+	// MARK: - GET /survey/:survey-id/response/:response-id/status
 	public struct GetSurveyResponse {
-		public struct ServerResponse {
+		public static var pathComponent: String { return "status" }
+		
+		public struct ServerResponse: Codable {
 			public enum ReplyStatus {
 				case replied(text: String, coupon: Coupon?)
 				case notReplied
@@ -117,6 +119,10 @@ public enum Survey: PathMakeable {
 			}
 			
 			public let status: ReplyStatus
+			
+			public init(status: ReplyStatus) {
+				self.status = status
+			}
 		}
 	}
 	
@@ -149,7 +155,7 @@ extension Survey.GetSurveyResponse.ServerResponse.ReplyStatus: Codable {
 	
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-
+		
 		switch self {
 		case .notReplied: try container.encode(CodableAction.notReplied, forKey: .value)
 		case .replied(let text, let coupon):
