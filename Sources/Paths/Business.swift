@@ -6,7 +6,8 @@ public enum Business {
 	// MARK: - /business/logo
 	
 	public enum Logo {
-		public typealias Response = Data
+		public static var pathComponent: String { return "logo" }
+		public typealias Response = URL?
 	}
 	
 	public enum GetShortInfo {
