@@ -79,12 +79,12 @@ public enum Search: PathMakeable {
 	}
 	
 	public struct BusinessModel: Codable {
-		public let businessID: String
+		public let adaptiveID: AdaptiveID
 		public let title: String
 		public let surveyID: UUID
 		
-		public init(id: String, title: String, surveyID: UUID) {
-			self.businessID = id
+		public init(id: AdaptiveID, title: String, surveyID: UUID) {
+			self.adaptiveID = id
 			self.title = title
 			self.surveyID = surveyID
 		}
