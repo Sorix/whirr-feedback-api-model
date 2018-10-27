@@ -22,21 +22,6 @@ public enum Search: PathMakeable {
 		public typealias Response = [BusinessModel]
 	}
 	
-	public enum PlaceID: PathMakeable {
-		public static var pathComponent: String { return "google-place-id" }
-		public static var parentPath: PathMakeable.Type? { return Search.self }
-		
-		public struct URLParametersRequest {
-			public var googlePlaceID: String
-			
-			public init(googlePlaceID: String) {
-				self.googlePlaceID = googlePlaceID
-			}
-		}
-		
-		public typealias Response = BusinessModel
-	}
-	
 	public enum Code: PathMakeable {
 		public static var pathComponent: String { return "code" }
 		public static var parentPath: PathMakeable.Type? { return Search.self }
