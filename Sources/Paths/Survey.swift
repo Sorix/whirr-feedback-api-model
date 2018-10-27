@@ -42,13 +42,20 @@ public enum Survey: PathMakeable {
 		public enum Create {
 			/// Expected request model for `POST /survey/:id/answer`
 			public struct Request: Codable {
-				public let businessID: String
+				public let adaptiveID: AdaptiveID
 				public let surveyID: UUID
 				public let questions: [Question]
 				public var additionalInformation: String?
 				
-				public init(businessID: String, surveyID: UUID, questions: [Question]) {
-					self.businessID = businessID
+				public init(adaptiveID: AdaptiveID, surveyID: UUID, questions: [Question]) {
+					self.adaptiveID = adaptiveID
+					self.surveyID = surveyID
+					self.questions = questions
+				}
+				
+				@available(*, deprecated, message: "Use `.init(adaptiveID:surveyID,questions:)` in future")
+				public init(businessID: String, surveyID: UUID, questions: [Question]) throws {
+					self.adaptiveID = try AdaptiveID(stringValue: businessID)
 					self.surveyID = surveyID
 					self.questions = questions
 				}
