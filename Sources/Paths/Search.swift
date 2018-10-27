@@ -53,13 +53,13 @@ public enum Search: PathMakeable {
 		
 		public struct Response: Codable {
 			public struct NotificationOptions: Codable {
-				public let businessId: String
+				public let adaptiveID: AdaptiveID
 				public var placeLogo: URL?
 				public let notifyIn: TimeInterval
 				public let notificationText: String
 				
-				public init(businessID: String, notifyIn: TimeInterval, notificationText: String) {
-					self.businessId = businessID
+				public init(adaptiveID: AdaptiveID, notifyIn: TimeInterval, notificationText: String) {
+					self.adaptiveID = adaptiveID
 					self.notifyIn = notifyIn
 					self.notificationText = notificationText
 				}
