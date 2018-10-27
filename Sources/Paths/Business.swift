@@ -7,7 +7,7 @@ public enum Business {
 	
 	public enum Logo {
 		public static var pathComponent: String { return "logo" }
-		public typealias Response = URL?
+		public typealias Response = Data?
 	}
 	
 	public enum GetShortInfo {
