@@ -13,10 +13,13 @@ public enum Survey: PathMakeable {
 			public let surveyID: UUID
 			public let questions: [String]
 			public var additionalInformationRequirement: AdditionalInformation?
+			public var thanksForFillingSurveyText: String
+			public var templateForPlaceCategory: String?
 			
-			public init(surveyID: UUID, questions: [String]) {
+			public init(surveyID: UUID, questions: [String], thanksForFillingSurveyText: String) {
 				self.surveyID = surveyID
 				self.questions = questions
+				self.thanksForFillingSurveyText = thanksForFillingSurveyText
 			}
 			
 			public struct AdditionalInformation: Codable {
@@ -40,23 +43,20 @@ public enum Survey: PathMakeable {
 		// MARK: POST /survey/:id/answer
 		
 		public enum Create {
-			/// Expected request model for `POST /survey/:id/answer`
+			/// Expected request model for `POST /survey/:survey-idid/response`
 			public struct Request: Codable {
 				public let adaptiveID: AdaptiveID
-				public let surveyID: UUID
 				public let questions: [Question]
 				public var additionalInformation: String?
 				
-				public init(adaptiveID: AdaptiveID, surveyID: UUID, questions: [Question]) {
+				public init(adaptiveID: AdaptiveID, questions: [Question]) {
 					self.adaptiveID = adaptiveID
-					self.surveyID = surveyID
 					self.questions = questions
 				}
 				
 				@available(*, deprecated, message: "Use `.init(adaptiveID:surveyID,questions:)` in future")
-				public init(businessID: String, surveyID: UUID, questions: [Question]) throws {
+				public init(businessID: String, questions: [Question]) throws {
 					self.adaptiveID = try AdaptiveID(stringValue: businessID)
-					self.surveyID = surveyID
 					self.questions = questions
 				}
 				
