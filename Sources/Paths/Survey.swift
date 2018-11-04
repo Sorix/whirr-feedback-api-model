@@ -48,6 +48,7 @@ public enum Survey: PathMakeable {
 				public let adaptiveID: AdaptiveID
 				public let questions: [Question]
 				public var additionalInformation: String?
+				public var comment: String?
 				
 				public init(adaptiveID: AdaptiveID, questions: [Question]) {
 					self.adaptiveID = adaptiveID
