@@ -95,41 +95,31 @@ public enum Survey: PathMakeable {
 				}
 			}
 		}
-	}
-	
-	// MARK: - GET /survey/:survey-id/response/:response-id/status
-	public struct GetSurveyResponse {
-		public static var pathComponent: String { return "status" }
 		
-		public struct ServerResponse: Codable {
-			public enum ReplyStatus {
-				case replied(text: String, coupon: Coupon?)
-				case notReplied
-			}
+		// MARK: - GET /survey/:survey-id/response/:response-id
+		public struct Get: Codable {
+			public let responseID, surveyID, businessID: UUID
+			public let questions: [Question]
+			public var comment: String?
+			public var additionalInformation: String?
+			public var businessReply: BusinessReply?
 			
-			public struct Coordinate: Codable {
-				public var latitude, longitude: Double
+			public struct BusinessReply: Codable {
+				public let replyText: String
+				public var couponURL: URL?
 				
-				public init(latitude: Double, longitude: Double) {
-					self.latitude = latitude
-					self.longitude = longitude
+				public init(replyText: String) {
+					self.replyText = replyText
 				}
 			}
 			
-			public struct Coupon: Codable {
-				public let title: String
-				public let detailInfo: String
-				public let validTo: Date?
-				public let imageUrl: URL?
-				public let location: Coordinate?
-				public let termsUrl: URL?
-				public let passUrl: URL
-			}
+			public typealias Question = Survey.SurveyResponse.Create.Request.Question
 			
-			public let status: ReplyStatus
-			
-			public init(status: ReplyStatus) {
-				self.status = status
+			public init(responseID: UUID, surveyID: UUID, businessID: UUID, questions: [Question]) {
+				self.responseID = responseID
+				self.surveyID = surveyID
+				self.businessID = businessID
+				self.questions = questions
 			}
 		}
 	}
@@ -148,43 +138,5 @@ public enum Survey: PathMakeable {
 				case valid, invalid
 			}
 		}
-	}
-}
-
-// MARK:
-extension Survey.GetSurveyResponse.ServerResponse.ReplyStatus: Codable {
-	private enum CodableAction: String, Codable {
-		case replied, notReplied
-	}
-	
-	private enum CodingKeys: String, CodingKey {
-		case value, text, coupon
-	}
-	
-	public func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		
-		switch self {
-		case .notReplied: try container.encode(CodableAction.notReplied, forKey: .value)
-		case .replied(let text, let coupon):
-			try container.encode(CodableAction.replied, forKey: .value)
-			try container.encode(text, forKey: .text)
-			try container.encode(coupon, forKey: .coupon)
-		}
-	}
-	
-	public init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		let action = try container.decode(CodableAction.self, forKey: .value)
-		
-		switch action {
-		case .notReplied: self = .notReplied
-		case .replied:
-			let text = try container.decode(String.self, forKey: .text)
-			let coupon = try container.decodeIfPresent(Survey.GetSurveyResponse.ServerResponse.Coupon.self, forKey: .coupon)
-			
-			self = .replied(text: text, coupon: coupon)
-		}
-		
 	}
 }
