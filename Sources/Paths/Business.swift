@@ -9,8 +9,4 @@ public enum Business {
 		public static var pathComponent: String { return "logo" }
 		public typealias Response = Data?
 	}
-	
-	public enum GetShortInfo {
-		public typealias Response = Search.BusinessModel
-	}
 }

@@ -37,6 +37,11 @@ public enum Search: PathMakeable {
 		public typealias Response = BusinessModel
 	}
 	
+	public enum ID {
+		public static var pathComponent: String { return "id" }
+		public typealias Response = Search.BusinessModel
+	}
+	
 	public enum Beacon {
 		public static var pathComponent: String { return "beacon" }
 		public static var parentPath: PathMakeable.Type? { return Search.self }
