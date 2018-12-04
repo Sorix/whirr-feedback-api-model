@@ -47,10 +47,10 @@ public enum Search: PathMakeable {
 		public static var parentPath: PathMakeable.Type? { return Search.self }
 		
 		public struct Request: Codable {
-			public var major: Int
-			public var minor: Int
+			public var major: UInt16
+			public var minor: UInt16
 			
-			public init(major: Int, minor: Int) {
+			public init(major: UInt16, minor: UInt16) {
 				self.major = major
 				self.minor = minor
 			}
