@@ -18,4 +18,12 @@ public enum Settings: PathMakeable {
 		
 		public init() {}
 	}
+	
+	// MARK: - GET /settings/allowed-place-categories
+	
+	public enum AllowedCategories {
+		public static var pathComponent: String { return "allowed-place-categories" }
+		
+		public static let response = [String].self
+	}
 }
