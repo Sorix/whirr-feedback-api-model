@@ -21,7 +21,7 @@
 /* Begin PBXFileReference section */
 		D94493FD21B4972A00474B69 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D9BD173821B52ECF00053009 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
-		"FeedbackAPIModel::APIModel::Product" /* APIModel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = APIModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"FeedbackAPIModel::APIModel::Product" /* APIModel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = APIModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_11 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		OBJ_13 /* Survey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Survey.swift; sourceTree = "<group>"; };
@@ -179,6 +179,7 @@
 		OBJ_20 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -203,6 +204,7 @@
 		OBJ_21 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
