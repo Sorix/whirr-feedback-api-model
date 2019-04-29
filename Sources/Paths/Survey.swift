@@ -11,13 +11,15 @@ public enum Survey: PathMakeable {
 		/// Server's response model for `GET /survey/:id`
 		public struct Response: Codable {
 			public let surveyID: UUID
+			public let surveyName: String
 			public let questions: [String]
 			public var additionalInformationRequirement: AdditionalInformation?
 			public var thanksForFillingSurveyText: String
 			public var templateForPlaceCategory: String?
 			
-			public init(surveyID: UUID, questions: [String], thanksForFillingSurveyText: String) {
+			public init(surveyID: UUID, surveyName: String, questions: [String], thanksForFillingSurveyText: String) {
 				self.surveyID = surveyID
+				self.surveyName = surveyName
 				self.questions = questions
 				self.thanksForFillingSurveyText = thanksForFillingSurveyText
 			}
